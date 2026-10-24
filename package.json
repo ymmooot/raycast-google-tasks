@@ -1,0 +1,37 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "google-tasks",
+  "title": "Google Tasks",
+  "description": "gog CLI 経由で Google Tasks を一覧・追加・完了する",
+  "icon": "icon.png",
+  "author": "ymmooot",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Google Tasks",
+      "description": "未完了のタスクをリストごとに表示する",
+      "mode": "view"
+    },
+    {
+      "name": "add-task",
+      "title": "Add Google Task",
+      "description": "タスクを追加する",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "2.9.0",
+    "@raycast/utils": "2.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.17",
+    "@types/react": "19.0.10",
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "typecheck": "tsc --noEmit"
+  }
+}
