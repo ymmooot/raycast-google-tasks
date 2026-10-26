@@ -35,7 +35,10 @@ export async function fetchAll(): Promise<ListWithTasks[]> {
   return Promise.all(
     lists.map(async (list) => ({
       list,
-      tasks: (await gogJson<Task[]>(["tasks", "list", list.id, "--max", "100"])) ?? [],
+      // gog は完了済みのタスクも返す
+      tasks: ((await gogJson<Task[]>(["tasks", "list", list.id, "--max", "100"])) ?? []).filter(
+        (task) => task.status !== "completed",
+      ),
     })),
   );
 }
