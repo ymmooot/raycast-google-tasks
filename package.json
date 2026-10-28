@@ -6,6 +6,16 @@
   "icon": "icon.png",
   "author": "ymmooot",
   "license": "MIT",
+  "preferences": [
+    {
+      "name": "gogPath",
+      "title": "gog Path",
+      "description": "gog CLI の絶対パス。空なら /opt/homebrew/bin と /usr/local/bin から探す",
+      "type": "textfield",
+      "required": false,
+      "placeholder": "/opt/homebrew/bin/gog"
+    }
+  ],
   "commands": [
     {
       "name": "index",

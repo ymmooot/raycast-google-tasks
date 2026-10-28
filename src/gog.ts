@@ -1,8 +1,22 @@
+import { getPreferenceValues } from "@raycast/api";
 import { execFile } from "node:child_process";
+import { existsSync } from "node:fs";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
-const GOG = "/Users/ryota/homebrew/bin/gog";
+
+// Raycast から起動したプロセスの PATH には Homebrew が入っていないため、既定の場所を探す
+const GOG_CANDIDATES = ["/opt/homebrew/bin/gog", "/usr/local/bin/gog"];
+
+function gogPath(): string {
+  const { gogPath } = getPreferenceValues<{ gogPath?: string }>();
+  if (gogPath) return gogPath;
+  const found = GOG_CANDIDATES.find((path) => existsSync(path));
+  if (!found) {
+    throw new Error("gog not found. Set its path in the extension preferences.");
+  }
+  return found;
+}
 
 export type TaskList = { id: string; title: string };
 export type Task = {
@@ -16,14 +30,14 @@ export type Task = {
 export type ListWithTasks = { list: TaskList; tasks: Task[] };
 
 async function gogJson<T>(args: string[]): Promise<T> {
-  const { stdout } = await execFileAsync(GOG, [...args, "--json", "--results-only"], {
+  const { stdout } = await execFileAsync(gogPath(), [...args, "--json", "--results-only"], {
     maxBuffer: 10 * 1024 * 1024,
   });
   return JSON.parse(stdout) as T;
 }
 
 async function gogRun(args: string[]): Promise<void> {
-  await execFileAsync(GOG, [...args, "--plain"]);
+  await execFileAsync(gogPath(), [...args, "--plain"]);
 }
 
 export function fetchLists(): Promise<TaskList[]> {
